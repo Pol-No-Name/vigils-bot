@@ -33,7 +33,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle('Honour Reset')
                 .setDescription('All honour points have been reset to 0.')
-                .setColor(0xff0000)
+                .setColor(0x89b9e0)
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
