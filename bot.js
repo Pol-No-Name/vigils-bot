@@ -4,7 +4,7 @@ const { Client, Collection, GatewayIntentBits, Events, EmbedBuilder } = require(
 const { DateTime } = require("luxon");
 
 const worldEvent_channelid = "1498803604939739186";
-const warning_time = 5;
+const warning_time = 10;
 
 const { updateLeaderboard } = require('./leaderboardManager');
 
