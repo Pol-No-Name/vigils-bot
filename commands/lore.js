@@ -20,7 +20,7 @@ module.exports = {
         ),
 
     async execute(interaction) {
-        await interaction.deferReply(); // ✅ prevents timeout errors
+        await interaction.deferReply();
 
         try {
             const user = interaction.options.getUser('user') || interaction.user;
@@ -28,12 +28,12 @@ module.exports = {
             const loreText = loreManager.getLore(user.id);
 
             const embed = new EmbedBuilder()
-                .setTitle(`${user.username}'s Lore`) // ✅ User has username, not displayName
+                .setTitle(`${user.username}'s Lore`)
                 .setDescription(
                     loreText || loreMissing[Math.floor(Math.random() * loreMissing.length)]
                 );
 
-            await interaction.editReply({ embeds: [embed] }); // ✅ use editReply after defer
+            await interaction.editReply({ embeds: [embed] });
         } catch (err) {
             console.error(err);
 

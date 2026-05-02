@@ -1,10 +1,8 @@
 const { EmbedBuilder } = require('discord.js');
 const db = require('./db');
 
-// ⚙️ CHANGE THIS
 const CHANNEL_ID = '1497762062464581642';
 
-// Create table for config if it doesn't exist
 db.prepare(`
     CREATE TABLE IF NOT EXISTS config (
         key TEXT PRIMARY KEY,
@@ -12,7 +10,6 @@ db.prepare(`
     )
 `).run();
 
-// 🔹 Build embed
 function getLeaderboardEmbed() {
     const topUsers = db.prepare(`
         SELECT id, points
@@ -37,13 +34,11 @@ function getLeaderboardEmbed() {
         .setTimestamp();
 }
 
-// 🔹 Get stored message ID
 function getMessageId() {
     const row = db.prepare(`SELECT value FROM config WHERE key = 'leaderboardMessageId'`).get();
     return row ? row.value : null;
 }
 
-// 🔹 Save message ID
 function setMessageId(id) {
     db.prepare(`
         INSERT INTO config (key, value)
@@ -52,7 +47,6 @@ function setMessageId(id) {
     `).run(id);
 }
 
-// 🔹 Main updater
 async function updateLeaderboard(client) {
     const channel = await client.channels.fetch(CHANNEL_ID);
     if (!channel) return;
@@ -68,7 +62,6 @@ async function updateLeaderboard(client) {
         message = null;
     }
 
-    // If message doesn't exist, create a new one
     if (!message) {
         message = await channel.send({
             embeds: [getLeaderboardEmbed()]
@@ -78,7 +71,6 @@ async function updateLeaderboard(client) {
         return;
     }
 
-    // Otherwise update existing message
     await message.edit({
         embeds: [getLeaderboardEmbed()]
     });

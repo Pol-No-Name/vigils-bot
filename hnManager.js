@@ -1,6 +1,5 @@
 const db = require('./db');
 
-// Get user
 function getUser(id) {
     let user = db.prepare('SELECT * FROM users WHERE id = ?').get(id);
 
@@ -12,7 +11,6 @@ function getUser(id) {
     return user;
 }
 
-// Add points
 function addPoints(id, amount) {
     getUser(id);
 
@@ -23,7 +21,6 @@ function addPoints(id, amount) {
     `).run(amount, id);
 }
 
-// Get points
 function getPoints(id) {
     return getUser(id).points;
 }

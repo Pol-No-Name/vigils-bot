@@ -1,6 +1,5 @@
 const db = require('./loreDb');
 
-// Get user
 function getUser(id) {
     let user = db.prepare('SELECT * FROM lore_users WHERE id = ?').get(id);
 
@@ -12,7 +11,6 @@ function getUser(id) {
     return user;
 }
 
-// Add lore
 function addLore(id, loreText) {
     getUser(id);
 
@@ -21,7 +19,6 @@ function addLore(id, loreText) {
     return { id, lore: loreText };
 }
 
-// Get lore
 function getLore(id) {
     const user = getUser(id);
     return user.lore || '';

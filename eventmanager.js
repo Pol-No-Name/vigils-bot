@@ -2,7 +2,6 @@ const { DateTime } = require("luxon");
 
 const timezone = "Europe/London";
 
-// --- EVENT TABLES ---
 const worldevent_carnival = {
     role: "1499841415205621853",
     events: [
@@ -78,7 +77,6 @@ function getAllEvents() {
     ];
 }
 
-// --- CORE: GET NEXT GLOBAL EVENT ---
 function getNextEvent() {
     const now = DateTime.now().setZone(timezone);
 
@@ -88,7 +86,6 @@ function getNextEvent() {
             { zone: timezone }
         );
 
-        // move to next day if already passed
         if (eventTime <= now) {
             eventTime = eventTime.plus({ days: 1 });
         }
@@ -105,7 +102,6 @@ function getNextEvent() {
     return next.reduce((a, b) => (a.time < b.time ? a : b));
 }
 
-// --- OPTIONAL HELPERS (kept for compatibility) ---
 function getNextByName(name) {
     const filtered = getAllEvents().filter(e => e.name === name);
     const now = DateTime.now().setZone(timezone);
@@ -126,7 +122,6 @@ function getNextByName(name) {
     return next.reduce((a, b) => (a.time < b.time ? a : b));
 }
 
-// --- EXPORTS ---
 module.exports = {
     getNextEvent,
     getNextCarnival: () => getNextByName("Carnival of Hearts"),

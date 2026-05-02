@@ -29,10 +29,8 @@ module.exports = {
             return interaction.editReply('Amount must be greater than 0.');
         }
 
-        // Remove points
         points.subtractPoints(user.id, amount);
 
-        // Update leaderboard (don’t block response if it fails)
         updateLeaderboard(interaction.client).catch(console.error);
 
         const embed = new EmbedBuilder()

@@ -52,7 +52,6 @@ client.on(Events.InteractionCreate, async interaction => {
     }
 });
 
-// --- EVENT TRACKING ---
 const sentEvents = new Set();
 
 function checkEvent(client, event, now) {
@@ -64,7 +63,6 @@ function checkEvent(client, event, now) {
 
         const channel = client.channels.cache.get(worldEvent_channelid);
 
-        // ✅ everything in SECONDS (Discord format)
         const startTimestamp = Math.floor(event.time.toSeconds());
         const endTimestamp = startTimestamp + (5 * 60);
 
@@ -104,15 +102,12 @@ client.once(Events.ClientReady, async () => {
         const parasol = getNextParasol();
         const battleRoyale = getNextBattleRoyale();
 
-        // check alerts
         checkEvent(client, carnival, now);
         checkEvent(client, parasol, now);
         checkEvent(client, battleRoyale, now);
 
-        // cleanup
         if (sentEvents.size > 100) sentEvents.clear();
 
-        // find next event overall
         const events = [carnival, parasol, battleRoyale];
 
         const nextEvent = events.reduce((a, b) =>
@@ -227,7 +222,7 @@ rl.on('line', async (input) => {
     }
 
     if (command === 'status') {
-        const type = args[0]?.toUpperCase(); // PLAYING, WATCHING, LISTENING
+        const type = args[0]?.toUpperCase();
         const text = args.slice(1).join(' ');
 
         if (!type || !text) {
