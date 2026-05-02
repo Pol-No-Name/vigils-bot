@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { REST, Routes } = require('discord.js');
+const { debugLog, setDebug } = require('./debug');
 require('dotenv').config();
 
 const TOKEN = process.env.BOT_TOKEN;

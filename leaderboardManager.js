@@ -31,8 +31,8 @@ function getLeaderboardEmbed() {
     }
 
     return new EmbedBuilder()
-        .setTitle('🏆 Honour Leaderboard')
-        .setColor(0xffd700)
+        .setTitle('Top Vigils Honor')
+        .setColor(0x89b9e0)
         .setDescription(`*"Honor, Unity, Strength"* \n To serve the vigils means to uphold the highest standards of dedication.\n\n${description || 'No data yet.'}`)
         .setTimestamp();
 }
