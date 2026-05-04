@@ -1,4 +1,4 @@
-const db = require('./loreDb');
+const db = require('./loredb');
 
 function getUser(id) {
     let user = db.prepare('SELECT * FROM lore_users WHERE id = ?').get(id);
