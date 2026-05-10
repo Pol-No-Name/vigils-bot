@@ -6,7 +6,7 @@ const { debugLog, setDebug } = require('./debug');
 
 let DEBUG = false;
 
-const worldEvent_channelid = "1498803604939739186";
+const worldEvent_channelid = "1503123519783829574";
 const warning_time = 5;
 
 const { updateLeaderboard } = require('./leaderboardManager');
