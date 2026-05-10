@@ -17,7 +17,8 @@ module.exports = {
             option.setName('user')
                 .setDescription('User to provide lore about')
                 .setRequired(false)
-        ),
+        )
+        .setDMPermission(false),
 
     async execute(interaction) {
         await interaction.deferReply();

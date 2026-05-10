@@ -38,7 +38,8 @@ const shopStuff = [
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bank')
-        .setDescription('View the items available to purchase from the Vigil\'s Bank'),
+        .setDescription('View the items available to purchase from the Vigil\'s Bank')
+        .setDMPermission(false),
     
     async execute(interaction) {
         const embed = new EmbedBuilder()

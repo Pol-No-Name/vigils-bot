@@ -5,7 +5,9 @@ const { updateLeaderboard } = require('../leaderboardManager');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('reset')
-        .setDescription('Reset the honour of all users (admin only)'),
+        .setDescription('Reset the honour of all users to 0')
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+        .setDMPermission(false),
 
     async execute(interaction) {
         await interaction.deferReply();

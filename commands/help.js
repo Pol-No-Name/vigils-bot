@@ -9,7 +9,8 @@ const descriptions = [
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('Shows a list of information about the bot'),
+        .setDescription('Shows a list of information about the bot')
+        .setDMPermission(false),
 
     async execute(interaction) {
         const embed = new EmbedBuilder()

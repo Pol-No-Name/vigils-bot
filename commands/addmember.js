@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const axios = require('axios');
 const sheetdbapi = process.env.SHEETDB_API_MEMBERS;
 
@@ -51,7 +51,10 @@ module.exports = {
                 .addChoices(
                 { name: 'NA', value: 'NA' },
                 { name: 'EU', value: 'EU' },
-            )
+        )
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+
 ),
     
     async execute(interaction) {

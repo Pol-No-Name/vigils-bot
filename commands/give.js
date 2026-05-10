@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, } = require('discord.js');
 const points = require('../hnManager');
 const { updateLeaderboard } = require('../leaderboardManager');
 
@@ -15,7 +15,9 @@ module.exports = {
             option.setName('amount')
                 .setDescription('Honour')
                 .setRequired(true)
-        ),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDMPermission(false),
 
     async execute(interaction) {
         await interaction.deferReply();

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagBits } = require('discord.js');
 const loreManager = require('../loreManager');
 
 module.exports = {
@@ -14,7 +14,10 @@ module.exports = {
             option.setName('lore')
                 .setDescription('Lore text to add or update')
                 .setRequired(true)
-        ),
+        )
+        .setDefaultMemberPermissions(PermissionFlagBits.Administrator)
+        .setDMPermission(false),
+        
     async execute(interaction) {
         const user = interaction.options.getUser('user');
         const lore = interaction.options.getString('lore');
