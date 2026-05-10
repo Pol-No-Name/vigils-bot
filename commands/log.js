@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField, } = require('discord.js');
 const sheetdbapi = process.env.SHEETDB_API;
 const axios = require('axios');
 
@@ -14,8 +14,7 @@ module.exports = {
             option.setName('reason')
                 .setDescription('The reason for the report')
                 .setRequired(true))
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .setDMPermission(false),
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
 
      async execute(interaction) {

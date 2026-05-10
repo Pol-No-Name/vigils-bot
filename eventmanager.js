@@ -3,7 +3,7 @@ const { DateTime } = require("luxon");
 const timezone = "Europe/London";
 
 const worldevent_carnival = {
-    role: "1499841415205621853",
+    role: "1503104647299072042",
     events: [
         { hour: 6, minute: 0, name: "Carnival of Hearts" },
         { hour: 7, minute: 30, name: "Carnival of Hearts" },
@@ -25,7 +25,7 @@ const worldevent_carnival = {
 };
 
 const worldevent_parasol = {
-    role: "1499841466963595284",
+    role: "1503104608556552372",
     events: [
     { hour: 6, minute: 30, name: "Interluminary Parasol" },
     { hour: 8, minute: 0, name: "Interluminary Parasol" },
@@ -47,7 +47,7 @@ const worldevent_parasol = {
 };
 
 const worldevent_battleroyale = {
-    role: "1499841449674412153",
+    role: "1503104695072460842",
     events: [
     { hour: 7, minute: 0, name: "Battle Royale" },
     { hour: 8, minute: 30, name: "Battle Royale" },

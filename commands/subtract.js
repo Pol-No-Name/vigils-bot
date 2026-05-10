@@ -18,8 +18,7 @@ module.exports = {
                 .setDescription('The amount of honour to remove')
                 .setRequired(true)
         )
-        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
-        .setDMPermission(false),
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
     
     async execute(interaction) {
         await interaction.deferReply();

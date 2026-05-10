@@ -6,8 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('reset')
         .setDescription('Reset the honour of all users to 0')
-        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
-        .setDMPermission(false),
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
     async execute(interaction) {
         await interaction.deferReply();

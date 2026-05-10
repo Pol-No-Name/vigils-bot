@@ -9,8 +9,7 @@ module.exports = {
             option.setName('user')
                 .setDescription('User to check honor points for')
                 .setRequired(false)
-        )
-        .setDMPermission(false),
+        ),
 
     async execute(interaction) {
         const user = interaction.options.getUser('user') || interaction.user;

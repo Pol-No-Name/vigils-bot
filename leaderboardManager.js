@@ -1,7 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 const db = require('./db');
 
-const CHANNEL_ID = '1497762062464581642';
+const CHANNEL_ID = '1503105802972696616';
 
 db.prepare(`
     CREATE TABLE IF NOT EXISTS config (
