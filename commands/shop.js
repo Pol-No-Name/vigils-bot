@@ -18,14 +18,6 @@ const shopStuff = [
         price: 75
     },
     {
-        name: 'Private Titus carry',
-        price: 100
-    },
-    {
-        name: 'Stack of Relic',
-        price: 200
-    },
-    {
         name: 'Whistling Periapt',
         price: 500
     },
