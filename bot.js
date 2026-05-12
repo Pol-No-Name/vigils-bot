@@ -5,6 +5,7 @@ const { DateTime } = require("luxon");
 const { debugLog, setDebug } = require('./debug');
 
 let DEBUG = false;
+require('dotenv').config();
 
 const warning_time = 5;
 
@@ -15,8 +16,6 @@ const {
     getNextParasol,
     getNextBattleRoyale
 } = require('./eventmanager');
-
-require('dotenv').config();
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds]
