@@ -6,7 +6,6 @@ const { debugLog, setDebug } = require('./debug');
 
 let DEBUG = false;
 
-const worldEvent_channelid = "1503123519783829574";
 const warning_time = 5;
 
 const { updateLeaderboard } = require('./leaderboardManager');
@@ -62,7 +61,7 @@ function checkEvent(client, event, now) {
     if (diff <= warning_time && diff > warning_time - 1 && !sentEvents.has(key)) {
         sentEvents.add(key);
 
-        const channel = client.channels.cache.get(worldEvent_channelid);
+        const channel = process.env.WOLRDEVENTCHANNEL;
 
         const startTimestamp = Math.floor(event.time.toSeconds());
         const endTimestamp = startTimestamp + (5 * 60);
