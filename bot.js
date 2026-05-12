@@ -60,7 +60,7 @@ function checkEvent(client, event, now) {
     if (diff <= warning_time && diff > warning_time - 1 && !sentEvents.has(key)) {
         sentEvents.add(key);
 
-        const channel = process.env.WOLRDEVENTCHANNEL;
+        const channel = await client.channels.fetch(process.env.WOLRDEVENTCHANNEL);
 
         const startTimestamp = Math.floor(event.time.toSeconds());
         const endTimestamp = startTimestamp + (5 * 60);
