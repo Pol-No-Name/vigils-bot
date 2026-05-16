@@ -1,54 +1,56 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
-const Swordsman_ID = 1361370385244749926;
-const AdvSwordsman_ID = 1438837496082599946;
-const Captain_ID = 1505316830678356049;
-const Instructor_ID = 1361370380773621770;
-const Blademaster_ID = 1438836488346275870;
-const Sentinel_ID = 1438836688305651792;
-
 const rankRequirements = [
-    { rank: 'Swordsman', req: "**25 Honor**, Have the uniform.", roleId: Swordsman_ID },
-    { rank: 'Advanced Swordsman', req: "**50 Honor**, Attend 2 WFTE events. Have a vouch from Instructor+", roleId: AdvSwordsman_ID },
-    { rank: 'Captain', req: "**150 Honor**, Attend 2 WFTE events. Have a vouch from a Sentinel+ as well as passing a special tryout.", roleId: Captain_ID },
-    { rank: 'Instructor', req: "**250 Honor**, Attend 3 WFTE events. Have tryoutted multiple people, approved by either Stratos or Maestro.", roleId: Instructor_ID },
-    { rank: 'Blademaster', req: "**500 Honor**, Attend 3 WFTE events. Must have hosted at least 2 events, MVP in one WFTE event and approval by either Maestro or Stratos.", roleId: Blademaster_ID },
-    { rank: 'Sentinel', req: "A Sentinel is specifically chosen by Maestro.", roleId: Sentinel_ID }
+    { rank: 'Swordsman', req: "**25 Honor**, Have the uniform.", roleId: '1361370385244749926' },
+    { rank: 'Advanced Swordsman', req: "**50 Honor**, Attend 2 WFTE events. Have a vouch from Instructor+", roleId: '1438837496082599946' },
+    { rank: 'Captain', req: "**150 Honor**, Attend 2 WFTE events. Have a vouch from a Sentinel+ as well as passing a special tryout.", roleId: '1505316830678356049' },
+    { rank: 'Instructor', req: "**250 Honor**, Attend 3 WFTE events. Have tryoutted multiple people, approved by either Stratos or Maestro.", roleId: '1361370380773621770' },
+    { rank: 'Blademaster', req: "**500 Honor**, Attend 3 WFTE events. Must have hosted at least 2 events, MVP in one WFTE event and approval by either Maestro or Stratos.", roleId: '1438836488346275870' },
+    { rank: 'Sentinel', req: "A Sentinel is specifically chosen by Maestro.", roleId: '1438836688305651792' }
 ];
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ranks')
-        .setDescription('Shows the requirements to rank up'),
+        .setDescription('Shows rank progression'),
 
-    getNextRank(member) {
-        let highestIndex = -1;
-        
+    getCurrentRankIndex(member) {
+        let highest = -1;
+
         for (let i = 0; i < rankRequirements.length; i++) {
-            const rank = rankRequirements[i];
-
-            if (member.roles.cache.has(rank.roleId)) {
-                highestIndex = i;
+            if (member.roles.cache.has(rankRequirements[i].roleId)) {
+                highest = i;
             }
         }
 
-        return rankRequirements[highestIndex + 1] || null;
+        return highest;
     },
 
     async execute(interaction) {
+        const member = interaction.member;
+
+        const currentIndex = this.getCurrentRankIndex(member);
+
+        const currentRank =
+            currentIndex >= 0 ? rankRequirements[currentIndex] : null;
+
+        const nextRank = rankRequirements[currentIndex + 1] || null;
+
         const embed = new EmbedBuilder()
-            .setTitle('Rank Up Requirements')
+            .setTitle('Rank Progression')
             .setColor(0xf5d06c);
 
-        const nextRank = this.getNextRank(interaction.member);
-
-        if (nextRank) {
+        if (!currentRank) {
             embed.setDescription(
-                `To rank up to **${nextRank.rank}**, you need:\n${nextRank.req}`
+                `You currently have no rank.\nNext rank: **${rankRequirements[0].rank}**\n${rankRequirements[0].req}`
+            );
+        } else if (!nextRank) {
+            embed.setDescription(
+                `You are currently **${currentRank.rank}**.\n\nYou have reached the highest rank.`
             );
         } else {
             embed.setDescription(
-                'Congratulations! You have achieved the highest rank!'
+                `You are currently **${currentRank.rank}**.\n\nNext rank: **${nextRank.rank}**\n${nextRank.req}`
             );
         }
 
