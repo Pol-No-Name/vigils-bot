@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
-const Initiate_ID = 1361370411241050243;
 const Swordsman_ID = 1361370385244749926;
 const AdvSwordsman_ID = 1438837496082599946;
 const Captain_ID = 1505316830678356049;
@@ -22,24 +21,16 @@ module.exports = {
         .setName('ranks')
         .setDescription('Shows the requirements to rank up'),
 
-    // Check if user has a role
-    userHasRole(roleId, member) {
-        return member.roles.cache.has(roleId);
-    },
-
-    // Get next rank based on highest current rank
     getNextRank(member) {
-        let highestIndex = -1;
+        for (let i = rankRequirements.length - 1; i >= 0; i--) {
+            const rank = rankRequirements[i];
 
-        // Find highest rank the user currently has
-        for (let i = 0; i < rankRequirements.length; i++) {
-            if (member.roles.cache.has(rankRequirements[i].roleId)) {
-                highestIndex = i;
+            if (member.roles.cache.has(rank.roleId)) {
+                return rankRequirements[i + 1] || null;
             }
         }
 
-        // Next rank in progression
-        return rankRequirements[highestIndex + 1] || null;
+        return rankRequirements[0];
     },
 
     async execute(interaction) {
