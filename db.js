@@ -1,5 +1,10 @@
 const Database = require('better-sqlite3');
-const db = new Database('points.db');
+
+const dbPath = process.env.RAILWAY_VOLUME_MOUNT_PATH
+    ? `${process.env.RAILWAY_VOLUME_MOUNT_PATH}/points.db`
+    : './points.db';
+
+const db = new Database(dbPath);
 
 db.prepare(`
     CREATE TABLE IF NOT EXISTS users (
