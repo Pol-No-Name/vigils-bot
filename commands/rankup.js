@@ -22,15 +22,17 @@ module.exports = {
         .setDescription('Shows the requirements to rank up'),
 
     getNextRank(member) {
-        for (let i = rankRequirements.length - 1; i >= 0; i--) {
+        let highestIndex = -1;
+        
+        for (let i = 0; i < rankRequirements.length; i++) {
             const rank = rankRequirements[i];
 
             if (member.roles.cache.has(rank.roleId)) {
-                return rankRequirements[i + 1] || null;
+                highestIndex = i;
             }
         }
 
-        return rankRequirements[0];
+        return rankRequirements[highestIndex + 1] || null;
     },
 
     async execute(interaction) {
