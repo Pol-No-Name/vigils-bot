@@ -25,7 +25,7 @@ const shopStuff = [
         name: 'Custom Role',
         price: 1500
     }
-];
+]; 
 
 module.exports = {
     data: new SlashCommandBuilder()
