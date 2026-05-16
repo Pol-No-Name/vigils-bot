@@ -8,7 +8,6 @@ const Instructor_ID = 1361370380773621770;
 const Blademaster_ID = 1438836488346275870;
 const Sentinel_ID = 1438836688305651792;
 
-
 const rankRequirements = [
     { rank: 'Swordsman', req: "**25 Honor**, Have the uniform.", roleId: Swordsman_ID },
     { rank: 'Advanced Swordsman', req: "**50 Honor**, Attend 2 WFTE events. Have a vouch from Instructor+", roleId: AdvSwordsman_ID },
@@ -22,33 +21,44 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('ranks')
         .setDescription('Shows the requirements to rank up'),
-    
-    // Check what role the user has and only show the requirements for the next rank up
+
+    // Check if user has a role
     userHasRole(roleId, member) {
         return member.roles.cache.has(roleId);
     },
 
-    async getNextRank(member) {
-        for (const rank of rankRequirements) {
-            if (!this.userHasRole(rank.roleId, member)) {
-                return rank;
+    // Get next rank based on highest current rank
+    getNextRank(member) {
+        let highestIndex = -1;
+
+        // Find highest rank the user currently has
+        for (let i = 0; i < rankRequirements.length; i++) {
+            if (member.roles.cache.has(rankRequirements[i].roleId)) {
+                highestIndex = i;
             }
-        }        return null; // User has all ranks
+        }
+
+        // Next rank in progression
+        return rankRequirements[highestIndex + 1] || null;
     },
 
-    // Show the requirements for the next rank up
-    
     async execute(interaction) {
         const embed = new EmbedBuilder()
             .setTitle('Rank Up Requirements')
             .setColor(0xf5d06c);
-        const nextRank = await this.getNextRank(interaction.member);
+
+        const nextRank = this.getNextRank(interaction.member);
 
         if (nextRank) {
-            embed.setDescription(`To rank up to **${nextRank.rank}**, you need:\n${nextRank.req}`);
+            embed.setDescription(
+                `To rank up to **${nextRank.rank}**, you need:\n${nextRank.req}`
+            );
         } else {
-            embed.setDescription('Congratulations! You have achieved the highest rank!');
+            embed.setDescription(
+                'Congratulations! You have achieved the highest rank!'
+            );
         }
+
         await interaction.reply({ embeds: [embed] });
     }
 };
