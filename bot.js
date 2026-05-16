@@ -53,7 +53,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 const sentEvents = new Set();
 
-function checkEvent(client, event, now) {
+async function checkEvent(client, event, now) {
     const diff = event.time.diff(now, 'minutes').minutes;
     const key = `${event.name}-${event.time.toISO()}`;
 
