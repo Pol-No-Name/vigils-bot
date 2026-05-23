@@ -3,9 +3,9 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const rankRequirements = [
     { rank: 'Swordsman', req: "**25 Honor**, Have the uniform.", roleId: '1361370385244749926' },
     { rank: 'Advanced Swordsman', req: "**50 Honor**, Attend 2 WFTE events. Have a vouch from Instructor+", roleId: '1438837496082599946' },
-    { rank: 'Captain', req: "**150 Honor**, Attend 2 WFTE events. Have a vouch from a Sentinel+ as well as passing a special tryout.", roleId: '1505316830678356049' },
-    { rank: 'Instructor', req: "**250 Honor**, Attend 3 WFTE events. Have tryoutted multiple people, approved by either Stratos or Maestro.", roleId: '1361370380773621770' },
-    { rank: 'Blademaster', req: "**500 Honor**, Attend 3 WFTE events. Must have hosted at least 2 events, MVP in one WFTE event and approval by either Maestro or Stratos.", roleId: '1438836488346275870' },
+    { rank: 'Captain', req: "**100 Honor**, Attend 2 WFTE events. Have a vouch from a Sentinel+ as well as passing a special tryout.", roleId: '1505316830678356049' },
+    { rank: 'Instructor', req: "**150 Honor**, Attend 3 WFTE events. Have tryoutted multiple people, approved by either Stratos or Maestro.", roleId: '1361370380773621770' },
+    { rank: 'Blademaster', req: "**250 Honor**, Attend 3 WFTE events. Must have hosted at least 2 events, MVP in one WFTE event and approval by either Maestro or Stratos.", roleId: '1438836488346275870' },
     { rank: 'Sentinel', req: "A Sentinel is specifically chosen by Maestro.", roleId: '1438836688305651792' }
 ];
 
@@ -42,7 +42,7 @@ module.exports = {
 
         if (!currentRank) {
             embed.setDescription(
-                `You currently have no rank.\nNext rank: **${rankRequirements[0].rank}**\n${rankRequirements[0].req}`
+                `You have no rank in the vigils.`
             );
         } else if (!nextRank) {
             embed.setDescription(

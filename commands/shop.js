@@ -10,6 +10,10 @@ const shopStuff = [
         price: 20
     },
     {
+        name: 'Smith\'s Alloy',
+        price: 30
+    },
+    {
         name: 'Moonseye Tome',
         price: 50
     },
