@@ -73,7 +73,7 @@ module.exports = {
                     Discord_ID: userId,
                     Region: region,
                     Rank: 'Vigil Initiate',
-                    Lore_slot: 'No',
+                    Lore_slot: '',
                     Loreslot: 'No',
                     Lore_Name: '',
                     Join_Date: timestamp,
