@@ -13,7 +13,7 @@ db.prepare(`
     )
 `).run();
 
-async function allScores() {
+function allScores() {
     return db.prepare(`
         SELECT id, points
         FROM users
@@ -24,4 +24,4 @@ async function allScores() {
 
 console.log(allScores());
 
-module.exports = db;
+module.exports = { db, allScores };
