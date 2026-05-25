@@ -10,17 +10,6 @@ db.prepare(`
     )
 `).run();
 
-function allScores() {
-    return db.prepare(`
-        SELECT id, points
-        FROM users
-        ORDER BY points DESC, id ASC
-    `).all();
-
-}
-
-console.log(allScores());
-
 function getLeaderboardEmbed() {
     const topUsers = db.prepare(`
         SELECT id, points
