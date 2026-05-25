@@ -13,15 +13,7 @@ db.prepare(`
     )
 `).run();
 
-function allScores() {
-    return db.prepare(`
-        SELECT id, points
-        FROM users
-        ORDER BY points DESC, id ASC
-    `).all();
-
-}
 
 console.log(allScores());
 
-module.exports = { db, allScores };
+module.exports =  db;
