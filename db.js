@@ -13,7 +13,7 @@ db.prepare(`
     )
 `).run();
 
-function allScores() {
+async function allScores() {
     return db.prepare(`
         SELECT id, points
         FROM users
