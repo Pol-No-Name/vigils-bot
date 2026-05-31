@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const rankRequirements = [
+    { rank: 'Initiate', req: "none", roleId: '1361370411241050243' },
     { rank: 'Swordsman', req: "**25 Honor**, Have the uniform.", roleId: '1361370385244749926' },
     { rank: 'Advanced Swordsman', req: "**50 Honor**, Attend 2 WFTE events. Have a vouch from Instructor+", roleId: '1438837496082599946' },
     { rank: 'Captain', req: "**100 Honor**, Attend 2 WFTE events. Have a vouch from a Sentinel+ as well as passing a special tryout.", roleId: '1505316830678356049' },
