@@ -14,6 +14,4 @@ db.prepare(`
 `).run();
 
 
-console.log(allScores());
-
 module.exports =  db;
