@@ -134,7 +134,8 @@ client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
 
     // Owner-only
-    if (message.author.id !== OWNER_ID || message.author.id !== SECONDOUNDER_ID) return;
+    if (message.author.id !== OWNER_ID) return;
+    if (message.author.id !== SECONDOUNDER_ID) return;
 
     // Must start with !
     if (!message.content.startsWith('!')) return;
