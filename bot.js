@@ -4,6 +4,7 @@ const { Client, Collection, GatewayIntentBits, Events, EmbedBuilder, ActivityTyp
 const { DateTime } = require("luxon");
 const { debugLog, setDebug } = require('./debug');
 const OWNER_ID = process.env.OWNER_ID;
+const SECONDOUNDER_ID = process.env.SECONDOUNDER_ID;
 
 let DEBUG = false;
 require('dotenv').config();
@@ -133,7 +134,7 @@ client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
 
     // Owner-only
-    if (message.author.id !== OWNER_ID) return;
+    if (message.author.id !== OWNER_ID || message.author.id !== SECONDOUNDER_ID) return;
 
     // Must start with !
     if (!message.content.startsWith('!')) return;
@@ -193,11 +194,6 @@ client.on('messageCreate', async (message) => {
             return message.reply(`WS Ping: ${client.ws.ping}ms`);
         }
 
-        if (command === 'clear') {
-            return message.reply(
-                'Cannot clear Railway logs from Discord.'
-            );
-        }
 
         if (command === 'vars') {
             return message.reply(
@@ -213,9 +209,9 @@ client.on('messageCreate', async (message) => {
             const battleRoyale = getNextBattleRoyale();
 
             return message.reply(
-                `🎪 Carnival: ${carnival.name}\n` +
-                `☂️ Parasol: ${parasol.name}\n` +
-                `⚔️ Battle Royale: ${battleRoyale.name}`
+                `Carnival: ${carnival.name}\n` +
+                `Parasol: ${parasol.name}\n` +
+                `Battle Royale: ${battleRoyale.name}`
             );
         }
 

@@ -26,7 +26,7 @@ getRobloxId = async (username) => {
 };
 
 function formatDate(input) {
-    const datePart = input.split('T')[0]; // YYYY-MM-DD
+    const datePart = input.split('T')[0]; 
     const [year, month, day] = datePart.split('-');
 
     return `${day}.${month}.${year}`;
