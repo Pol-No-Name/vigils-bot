@@ -28,6 +28,14 @@ const shopStuff = [
     {
         name: 'Custom Role',
         price: 1500
+    },
+    {
+        name: 'Reaction Perms',
+        price: 40
+    },
+    {
+        name: 'Gif Perms',
+        price: 60
     }
 ]; 
 
