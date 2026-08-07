@@ -21,21 +21,26 @@ module.exports = {
         const embed = {
             title: `${member.displayName}'s Profile`,
             color: 0x89b9e0,
-            description: 'Joined the server on ' + member.joinedAt.toDateString(),
+            description: 'Joined ' + member.joinedAt.toDateString(),
             fields: [
                 {
-                    name: "HONOR",
+                    name: "Honor:",
                     value: `${pointsValue}`,
                     inline: true
                 },
                 {
-                    name: "EVENTS",
+                    name: "Events:",
                     value: "0",
                     inline: true
+                },
+                {
+                    name: "Region: " + (member.roles.cache.some(role => role.name === 'NA division') ? 'NA' : member.roles.cache.some(role => role.name === 'EU division') ? 'EU' : 'Unknown'),
+                    inline: false
                 }
+
             ],
             thumbnail: {
-                url: user.displayAvatarURL()
+                url: member.displayAvatarURL()
             }
         };
 
