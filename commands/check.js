@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const points = require('../hnManager');
+const member = interaction.options.getMember('user') || interaction.member;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,7 +17,7 @@ module.exports = {
         const pointsValue = points.getPoints(user.id);
 
         const embed = {
-            title: `${user.nickname}'s Profile`,
+            title: `${member.nickname || user.username}'s Profile`,
             description: `**${pointsValue}** honor points\n`,
             color: 0x89b9e0
         };
