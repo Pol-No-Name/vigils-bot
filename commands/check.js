@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const points = require('../hnManager');
+const loreManager = require('../loreManager');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,6 +16,7 @@ module.exports = {
     async execute(interaction) {
         const user = interaction.options.getUser('user') || interaction.user;
         const member = interaction.options.getMember('user') || interaction.member;
+        const loreText = loreManager.getLore(user.id);
 
         const pointsValue = points.getPoints(user.id);
 
@@ -62,6 +64,11 @@ module.exports = {
                                                     ? 'Maestro'
                                                     : 'Unknown',
                     inline: true
+                },
+                {
+                    name: "-----Lore-----",
+                    value: loreText || "No lore available for this user.",
+                    inline: false
                 }
             ],
             thumbnail: {
