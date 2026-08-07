@@ -20,8 +20,23 @@ module.exports = {
 
         const embed = {
             title: `${member.displayName}'s Profile`,
-            description: `**${pointsValue}** honor points\n`,
-            color: 0x89b9e0
+            color: 0x89b9e0,
+            description: 'Joined the server on ' + member.joinedAt.toDateString(),
+            fields: [
+                {
+                    name: "HONOR",
+                    value: `${pointsValue}`,
+                    inline: true
+                },
+                {
+                    name: "EVENTS",
+                    value: "0",
+                    inline: true
+                }
+            ],
+            thumbnail: {
+                url: user.displayAvatarURL()
+            }
         };
 
         await interaction.reply({ embeds: [embed] });
