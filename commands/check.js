@@ -34,10 +34,14 @@ module.exports = {
                     inline: true
                 },
                 {
-                    name: "Region: " + (member.roles.cache.some(role => role.name === 'NA division') ? 'NA' : member.roles.cache.some(role => role.name === 'EU division') ? 'EU' : 'Unknown'),
+                    name: "Region:",
+                    value: member.roles.cache.some(role => role.name === 'NA division') 
+                        ? 'NA' 
+                        : member.roles.cache.some(role => role.name === 'EU division') 
+                            ? 'EU' 
+                            : 'Unknown',
                     inline: false
                 }
-
             ],
             thumbnail: {
                 url: member.displayAvatarURL()
