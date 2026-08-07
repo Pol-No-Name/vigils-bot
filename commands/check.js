@@ -29,7 +29,7 @@ module.exports = {
                     inline: true
                 },
                 {
-                    name: "Events:",
+                    name: "Event Points:",
                     value: "0",
                     inline: true
                 },
@@ -41,6 +41,27 @@ module.exports = {
                             ? 'EU' 
                             : 'Unknown',
                     inline: false
+                },
+                {
+                    name: "Rank:",
+                    value: member.roles.cache.some(role => role.name === 'Vigil Initiate') 
+                        ? 'Vigil Initiate'
+                        : member.roles.cache.some(role => role.name === 'Vigil Swordsman')
+                            ? 'Vigil Swordsman'
+                            : member.roles.cache.some(role => role.name === 'Advanced Vigil Swordsman')
+                                ? 'Adv. Vigil Swordsman'
+                                : member.roles.cache.some(role => role.name === 'Vigil Captain')
+                                    ? 'Vigil Captain'
+                                    : member.roles.cache.some(role => role.name === 'Blade Instructor')
+                                        ? 'Blade Instructor'
+                                        : member.roles.cache.some(role => role.name === 'Vigil Blademaster')
+                                            ? 'Vigil Blademaster'
+                                            : member.roles.cache.some(role => role.name === 'Vigil Sentinel')
+                                                ? 'Vigil Sentinel'
+                                                : member.roles.cache.some(role => role.name === 'Maestro Evengarde Rest')
+                                                    ? 'Maestro'
+                                                    : 'Unknown',
+                    inline: true
                 }
             ],
             thumbnail: {
