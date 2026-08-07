@@ -3,31 +3,31 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const shopStuff = [
     {
         name: 'Armorer\'s Needle',
-        price: 10
+        price: 6
     },
     {
         name: 'Idol of Yun\'shul',
-        price: 20
+        price: 8
     },
     {
         name: 'Smith\'s Alloy',
-        price: 30
+        price: 6
     },
     {
         name: 'Moonseye Tome',
-        price: 50
+        price: 12
     },
     {
         name: 'Easy boss carry',
-        price: 75
+        price: 30
     },
     {
         name: 'Whistling Periapt',
-        price: 500
+        price: 400
     },
     {
         name: 'Custom Role',
-        price: 1500
+        price: 600
     },
     {
         name: 'Reaction Perms',
