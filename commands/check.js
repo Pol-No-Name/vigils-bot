@@ -3,11 +3,11 @@ const points = require('../hnManager');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('check')
-        .setDescription("Check your or someone else's honor points")
+        .setName('profile')
+        .setDescription("Check your own profile or another person's profile")
         .addUserOption(option =>
             option.setName('user')
-                .setDescription('User to check honor points for')
+                .setDescription('User to check the profile of')
                 .setRequired(false)
         ),
 
@@ -16,7 +16,7 @@ module.exports = {
         const pointsValue = points.getPoints(user.id);
 
         const embed = {
-            title: `${user.username}'s Honor Points`,
+            title: `${user}'s Profile`,
             description: `**${pointsValue}** honor points\n`,
             color: 0x89b9e0
         };
