@@ -16,7 +16,7 @@ module.exports = {
         const pointsValue = points.getPoints(user.id);
 
         const embed = {
-            title: `${user.displayName}'s Profile`,
+            title: `${user.nickname || user.username}'s Profile`,
             description: `**${pointsValue}** honor points\n`,
             color: 0x89b9e0
         };
