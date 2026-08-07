@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const points = require('../hnManager');
+const eventPoints = require('../epManager');
 const loreManager = require('../loreManager');
 
 module.exports = {
@@ -32,7 +33,7 @@ module.exports = {
                 },
                 {
                     name: "Event Points:",
-                    value: "0",
+                    value: `${eventPoints.getPoints(user.id)}`,
                     inline: true
                 },
                 {
