@@ -63,7 +63,7 @@ module.exports = {
                     inline: true,
                 },
                 {
-                    name: 'Backup Responders',
+                    name: `Backup Responders [${backupResponses}]`,
                     value: '',
                 }
             ]
