@@ -10,14 +10,12 @@ module.exports = {
         .setName('give')
         .setDescription('Give points to a user')
         .addUserOption(option =>
-            option
-                .setName('user')
+            option.setName('user')
                 .setDescription('User to give points to')
                 .setRequired(true)
         )
         .addIntegerOption(option =>
-            option
-                .setName('amount')
+            option.setName('amount')
                 .setDescription('Amount of points')
                 .setRequired(true)
         )
