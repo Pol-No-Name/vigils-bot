@@ -42,7 +42,7 @@ module.exports = {
 
             title: `${member.displayName} has requested backup!`,
 
-            description: '',
+            description: '*Response is required immediately.*',
 
             fields: [
                 {
@@ -64,7 +64,11 @@ module.exports = {
                     name: 'Backup Responders [0]',
                     value: 'None yet.',
                 }
-            ]
+            ],
+
+            footer: {
+                text: '“Honor, Unity, Strength.”',
+            }
         };
 
         const button = new ButtonBuilder()
