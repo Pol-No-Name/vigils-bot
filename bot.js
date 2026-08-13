@@ -93,6 +93,59 @@ async function checkEvent(client, event, now) {
     }
 }
 
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isButton()) return;
+
+    if (interaction.customId === 'acknowledge_backup') {
+
+        const message = interaction.message;
+        const embed = message.embeds[0];
+
+        // Find the Backup Responders field
+        const responderField = embed.fields.find(
+            field => field.name === 'Backup Responders'
+        );
+
+        let responders = [];
+
+        if (responderField && responderField.value !== 'None yet.') {
+            responders = responderField.value
+                .split('\n')
+                .filter(Boolean);
+        }
+
+        // Don't allow the same person to respond twice
+        const mention = `<@${interaction.user.id}>`;
+
+        if (responders.includes(mention)) {
+            await interaction.reply({
+                content: 'You have already responded to this backup request.',
+                ephemeral: true
+            });
+            return;
+        }
+
+        responders.push(mention);
+
+        // Create a new embed with the updated responder list
+        const updatedEmbed = EmbedBuilder.from(embed)
+            .spliceFields(
+                embed.fields.findIndex(
+                    field => field.name === 'Backup Responders'
+                ),
+                1,
+                {
+                    name: 'Backup Responders',
+                    value: responders.join('\n')
+                }
+            );
+
+        await interaction.update({
+            embeds: [updatedEmbed]
+        });
+    }
+});
+
 client.once(Events.ClientReady, async () => {
     console.log(`Logged in as ${client.user.tag}`);
 

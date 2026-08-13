@@ -11,37 +11,55 @@ module.exports = {
         .setName('backup')
         .setDescription('Request backup')
         .addStringOption(option =>
-            option.setName('location')
-                .setDescription('The luminant and server you require backup at')
+            option.setName('server')
+                .setDescription('The server you are requesting backup for')
                 .setRequired(true)
         )
         .addStringOption(option =>
-            option.setName('info')
-                .setDescription('Any additional information for the backup request')
-                .setRequired(false)
+            option.setName('location')
+                .setDescription('The location where backup is needed')
+                .setRequired(true)
+        )
+        .addStringOption(option =>
+            option.setName('enemies')
+                .setDescription('The guild name(s) of the enemies')
+                .setRequired(true)
         )
         .setDefaultMemberPermissions(0),
 
     async execute(interaction) {
+        const server = interaction.options.getString('server');
         const location = interaction.options.getString('location');
-        const info = interaction.options.getString('info') || 'N/A';
+        const enemies = interaction.options.getString('enemies');
         const member = interaction.options.getMember('user') || interaction.member;
 
         const embed = {
             color: 0xFF0000,
-            title: `${member.user.username} has requested backup!`,
+            title: `${member.nickName} has requested backup!`,
             description: `The backup has been requested at the location **${location}**.`,
             fields: [
                 {
-                    name: info !== 'N/A' ? 'Additional Information:' : '\u200B',
-                    value: info !== 'N/A' ? info : '\u200B',
+                    name: 'Server',
+                    value: server,
+                },
+                {
+                    name: 'Location',
+                    value: location,
+                },
+                {
+                    name: 'Enemies',
+                    value: enemies,
+                },
+                {
+                    name: 'Backup Responders',
+                    value: 'N/A',
                 }
             ]
         };
 
         const button = new ButtonBuilder()
             .setCustomId('acknowledge_backup')
-            .setLabel('Respond to Backup')
+            .setLabel('Join the relief party')
             .setStyle(ButtonStyle.Primary);
 
         const row = new ActionRowBuilder()
