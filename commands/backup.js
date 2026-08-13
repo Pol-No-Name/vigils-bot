@@ -35,24 +35,27 @@ module.exports = {
 
         const embed = {
             color: 0xFF0000,
-            title: `${member.nickName} has requested backup!`,
+            title: `${member.displayName} has requested backup!`,
             description: `The backup has been requested at the location **${location}**.`,
             fields: [
                 {
                     name: 'Server',
                     value: server,
+                    inline: true,
                 },
                 {
                     name: 'Location',
                     value: location,
+                    inline: true,
                 },
                 {
                     name: 'Enemies',
                     value: enemies,
+                    inline: true,
                 },
                 {
                     name: 'Backup Responders',
-                    value: 'N/A',
+                    value: '',
                 }
             ]
         };
