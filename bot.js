@@ -5,7 +5,7 @@ const { DateTime } = require("luxon");
 const { debugLog, setDebug } = require('./debug');
 const OWNER_ID = process.env.OWNER_ID;
 const SECONDOUNDER_ID = process.env.SECONDOUNDER_ID;
-const backup = require('./commands/backup');
+const backupRequests = new Map();
 
 let DEBUG = false;
 require('dotenv').config();
@@ -99,27 +99,15 @@ client.on('interactionCreate', async interaction => {
 
     if (interaction.customId === 'acknowledge_backup') {
 
-        const newCount = backup.addBackupResponse();
-        console.log(`Backup responses: ${newCount}`);
+        const messageId = interaction.message.id;
 
-        const message = interaction.message;
-        const embed = message.embeds[0];
-
-        const responderField = embed.fields.find(
-            field => field.name === 'Backup Responders'
-        );
-
-        let responders = [];
-
-        if (responderField && responderField.value !== 'None yet.') {
-            responders = responderField.value
-                .split('\n')
-                .filter(Boolean);
+        if (!backupRequests.has(messageId)) {
+            backupRequests.set(messageId, []);
         }
 
-        const mention = `<@${interaction.user.id}>`;
+        const responders = backupRequests.get(messageId);
 
-        if (responders.includes(mention)) {
+        if (responders.includes(interaction.user.id)) {
             await interaction.reply({
                 content: 'You have already responded to this backup request.',
                 ephemeral: true
@@ -127,29 +115,41 @@ client.on('interactionCreate', async interaction => {
             return;
         }
 
-        responders.push(mention);
+        responders.push(interaction.user.id);
+
+        const mentions = responders.map(
+            id => `<@${id}>`
+        );
 
         const formattedResponders = [];
 
-        for (let i = 0; i < responders.length; i += 4) {
+        for (let i = 0; i < mentions.length; i += 4) {
             formattedResponders.push(
-                responders.slice(i, i + 4).join(' • ')
+                mentions.slice(i, i + 4).join(' • ')
             );
         }
 
         const responderText = formattedResponders.join('\n');
 
+        const embed = interaction.message.embeds[0];
+
+        const responderFieldIndex = embed.fields.findIndex(
+            field => field.name.startsWith('Backup Responders')
+        );
+
         const updatedEmbed = EmbedBuilder.from(embed)
             .spliceFields(
-                embed.fields.findIndex(
-                    field => field.name === 'Backup Responders'
-                ),
+                responderFieldIndex,
                 1,
                 {
-                    name: 'Backup Responders',
+                    name: `Backup Responders [${responders.length}]`,
                     value: responderText
                 }
             );
+
+        await interaction.update({
+            embeds: [updatedEmbed]
+        });
     }
 });
 
