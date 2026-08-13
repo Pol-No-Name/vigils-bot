@@ -5,6 +5,7 @@ const { DateTime } = require("luxon");
 const { debugLog, setDebug } = require('./debug');
 const OWNER_ID = process.env.OWNER_ID;
 const SECONDOUNDER_ID = process.env.SECONDOUNDER_ID;
+const backup = require('./commands/backup');
 
 let DEBUG = false;
 require('dotenv').config();
@@ -98,10 +99,12 @@ client.on('interactionCreate', async interaction => {
 
     if (interaction.customId === 'acknowledge_backup') {
 
+        const newCount = backup.addBackupResponse();
+        console.log(`Backup responses: ${newCount}`);
+
         const message = interaction.message;
         const embed = message.embeds[0];
 
-        // Find the Backup Responders field
         const responderField = embed.fields.find(
             field => field.name === 'Backup Responders'
         );
@@ -114,7 +117,6 @@ client.on('interactionCreate', async interaction => {
                 .filter(Boolean);
         }
 
-        // Don't allow the same person to respond twice
         const mention = `<@${interaction.user.id}>`;
 
         if (responders.includes(mention)) {
@@ -127,7 +129,16 @@ client.on('interactionCreate', async interaction => {
 
         responders.push(mention);
 
-        // Create a new embed with the updated responder list
+        const formattedResponders = [];
+
+        for (let i = 0; i < responders.length; i += 4) {
+            formattedResponders.push(
+                responders.slice(i, i + 4).join(' • ')
+            );
+        }
+
+        const responderText = formattedResponders.join('\n');
+
         const updatedEmbed = EmbedBuilder.from(embed)
             .spliceFields(
                 embed.fields.findIndex(
@@ -136,13 +147,9 @@ client.on('interactionCreate', async interaction => {
                 1,
                 {
                     name: 'Backup Responders',
-                    value: responders.join('\n')
+                    value: responderText
                 }
             );
-
-        await interaction.update({
-            embeds: [updatedEmbed]
-        });
     }
 });
 

@@ -6,6 +6,8 @@ const {
     ActionRowBuilder
 } = require('discord.js');
 
+let backupResponses = 0;
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('backup')
@@ -27,7 +29,14 @@ module.exports = {
         )
         .setDefaultMemberPermissions(0),
 
-    async execute(interaction) {
+    getBackupResponses: () => backupResponses,
+    addBackupResponse: () => {
+        backupResponses++;
+        return backupResponses;
+    },  
+
+    async execute(interaction) {   
+
         const server = interaction.options.getString('server');
         const location = interaction.options.getString('location');
         const enemies = interaction.options.getString('enemies');
@@ -62,8 +71,8 @@ module.exports = {
 
         const button = new ButtonBuilder()
             .setCustomId('acknowledge_backup')
-            .setLabel('Join the relief party')
-            .setStyle(ButtonStyle.Primary);
+            .setLabel('Provide Reinforcement')
+            .setStyle(ButtonStyle.Danger);
 
         const row = new ActionRowBuilder()
             .addComponents(button);
