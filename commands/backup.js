@@ -48,7 +48,7 @@ module.exports = {
             .addComponents(button);
 
         await interaction.reply({
-            content: '<@&1405290375773556957>',
+            content: '<@1405290375773556957>',
             embeds: [embed],
             components: [row]
             });
