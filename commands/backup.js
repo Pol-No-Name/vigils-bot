@@ -26,9 +26,7 @@ module.exports = {
             option.setName('enemies')
                 .setDescription('The guild name(s) of the enemies')
                 .setRequired(true)
-        )
-
-        .setDefaultMemberPermissions(0),
+        ),
 
     async execute(interaction) {
 
