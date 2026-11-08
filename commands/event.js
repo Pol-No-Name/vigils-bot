@@ -10,7 +10,82 @@ const {
     MessageFlags
 } = require('discord.js');
 
+const events = new Map();
+
+function buildEventContainer(event) {
+
+    const mentions = event.participants.map(id => `<@${id}>`);
+
+    const formattedParticipants = [];
+
+    for (let i = 0; i < mentions.length; i += 4) {
+        formattedParticipants.push(
+            mentions.slice(i, i + 4).join(' • ')
+        );
+    }
+
+    const participantText = formattedParticipants.length
+        ? formattedParticipants.join('\n')
+        : 'Nobody has joined yet.';
+
+    return new ContainerBuilder()
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(`<@&1361371687505105128>\n# ${event.title}`)
+        )
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(`Hosted by <@${event.host}>`)
+        )
+        .addSeparatorComponents(
+            new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+        )
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(`**Description:**\n${event.description}`)
+        )
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(`**Category:**\n${event.category}`)
+        )
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(`**Location:**\n${event.location}`)
+        )
+        .addSeparatorComponents(
+            new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+        )
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(
+                    `**Participants [${event.participants.length}]**\n${participantText}`
+                )
+        )
+        .addSeparatorComponents(
+            new SeparatorBuilder()
+                .setSpacing(SeparatorSpacingSize.Small)
+        )
+        .addSectionComponents(
+            new SectionBuilder()
+                .addTextDisplayComponents(
+                    new TextDisplayBuilder()
+                        .setContent(`**Starts:**\n<t:${event.eventTime}:R>`)
+                )
+                .setButtonAccessory(
+                    new ButtonBuilder()
+                        .setCustomId('join_event')
+                        .setLabel('Join Event')
+                        .setStyle(ButtonStyle.Primary)
+                )
+        );
+}
+
 module.exports = {
+    events,
+    buildEventContainer,
+
     data: new SlashCommandBuilder()
         .setName('event')
         .setDescription('create an event')
@@ -35,8 +110,7 @@ module.exports = {
                     { name: 'Sparring', value: 'Sparring' },
                     { name: 'Tournament', value: 'Tournament' },
                     { name: 'Misc', value: 'Misc' }
-                )
-        )
+                ))
         .addStringOption(option =>
             option.setName('location')
                 .setDescription('The event location')
@@ -74,55 +148,27 @@ module.exports = {
             (Date.now() + amount * multipliers[unit]) / 1000
         );
 
-        const discordTimestamp = `<t:${eventTime}:R>`;
+        const event = {
+            title,
+            description,
+            category,
+            location,
+            host: host.id,
+            eventTime,
+            participants: []
+        };
 
-        const container = new ContainerBuilder()
-            .addTextDisplayComponents(
-                new TextDisplayBuilder()
-                    .setContent(`# ${title}`)
-            )
-            .addTextDisplayComponents(
-                new TextDisplayBuilder()
-                    .setContent(`Hosted by <@${host.id}>`)
-            )
-            .addSeparatorComponents(
-                new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-            )
-            .addTextDisplayComponents(
-                new TextDisplayBuilder()
-                    .setContent(`**Description: **\n${description}`)
-            )
-            .addTextDisplayComponents(
-                new TextDisplayBuilder()
-                    .setContent(`**Category: **\n${category}`)
-            )
-            .addTextDisplayComponents(
-                new TextDisplayBuilder()
-                    .setContent(`**Location: **\n${location}`)
-            )
-            .addSeparatorComponents(
-                new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-            )
-            .addSectionComponents(
-                new SectionBuilder()
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder()
-                            .setContent(`**Starts: **\n${discordTimestamp}`)
-                    )
-                    .setButtonAccessory(
-                        new ButtonBuilder()
-                            .setCustomId('join_event')
-                            .setLabel('Join Event')
-                            .setStyle(ButtonStyle.Primary)
-                    )
-            );
+        const container = buildEventContainer(event);
 
-        await interaction.reply({
-            content: '<@&1361371687505105128>',
+        const message = await interaction.reply({
             components: [container],
-            flags: MessageFlags.IsComponentsV2
+            flags: MessageFlags.IsComponentsV2,
+            allowedMentions: {
+                roles: ['1361371687505105128']
+            },
+            fetchReply: true
         });
+
+        events.set(message.id, event);
     }
 };
