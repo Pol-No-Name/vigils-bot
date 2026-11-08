@@ -8,7 +8,7 @@ const {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('event')
-        .setDescription('Create an event')
+        .setDescription('create an event')
         .addStringOption(option =>
             option.setName('title')
                 .setDescription('The event title')
@@ -23,6 +23,7 @@ module.exports = {
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('category')
+                .setDescription('The event category')
                 .setRequired(true)
                 .addChoices(
                     { name: 'Patrol', value: 'Patrol' },
@@ -67,6 +68,10 @@ module.exports = {
 
         const embed = {
             title: `# ${title}`,
+            mentions: {
+                users: [host.id]
+            },
+            description: `Hosted by <@${host.id}>`,
             fields: [
                 {
                     name: '\u200b',
