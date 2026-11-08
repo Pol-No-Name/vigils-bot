@@ -2,7 +2,12 @@ const {
     SlashCommandBuilder,
     ButtonBuilder,
     ButtonStyle,
-    ActionRowBuilder
+    ContainerBuilder,
+    TextDisplayBuilder,
+    SeparatorBuilder,
+    SeparatorSpacingSize,
+    SectionBuilder,
+    MessageFlags
 } = require('discord.js');
 
 module.exports = {
@@ -66,45 +71,64 @@ module.exports = {
 
         const discordTimestamp = `<t:${eventTime}:R>`;
 
-        const embed = {
-            title: `# ${title}`,
-            mentions: {
-                users: [host.id]
-            },
-            description: `Hosted by <@${host.id}>`,
-            fields: [
-                {
-                    name: '\u200b',
-                    value: '### ━━━━━━━━━━━━━━━━━━━━━',
-                    inline: false
-                },
-                {
-                    name: 'Description',
-                    value: `${description}`,
-                    inline: false
-                },
-                {
-                    name: 'Category',
-                    value: `${category}`,
-                    inline: false
-                },
-                {
-                    name: 'Starts',
-                    value: `${discordTimestamp}`,
-                    inline: false
-                }
-            ],
-            color: 0x89b9e0
-            };
-
-        const button = new ButtonBuilder()
-            .setCustomId('join_event')
-            .setLabel('Join Event')
-            .setStyle(ButtonStyle.Primary);
+        const container = new ContainerBuilder()
+            .addTextDisplayComponents(
+                new TextDisplayBuilder()
+                    .setContent(`# ${title}`)
+            )
+            .addSeparatorComponents(
+                new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+            )
+            .addTextDisplayComponents(
+                new TextDisplayBuilder()
+                    .setContent(`Hosted by <@${host.id}>`)
+            )
+            .addSeparatorComponents(
+                new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+            )
+            .addTextDisplayComponents(
+                new TextDisplayBuilder()
+                    .setContent(`**Description**\n${description}`)
+            )
+            .addSeparatorComponents(
+                new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+            )
+            .addTextDisplayComponents(
+                new TextDisplayBuilder()
+                    .setContent(`**Category**\n${category}`)
+            )
+            .addSeparatorComponents(
+                new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+            )
+            .addTextDisplayComponents(
+                new TextDisplayBuilder()
+                    .setContent(`**Starts**\n${discordTimestamp}`)
+            )
+            .addSeparatorComponents(
+                new SeparatorBuilder()
+                    .setSpacing(SeparatorSpacingSize.Small)
+            )
+            .addSectionComponents(
+                new SectionBuilder()
+                    .addTextDisplayComponents(
+                        new TextDisplayBuilder()
+                            .setContent(`**Starts**\n${discordTimestamp}`)
+                    )
+                    .setButtonAccessory(
+                        new ButtonBuilder()
+                            .setCustomId('join_event')
+                            .setLabel('Join Event')
+                            .setStyle(ButtonStyle.Primary)
+                    )
+            );
 
         await interaction.reply({
-            embeds: [embed],
-            components: [new ActionRowBuilder().addComponents(button)]
+            components: [container],
+            flags: MessageFlags.IsComponentsV2
         });
     }
 };
