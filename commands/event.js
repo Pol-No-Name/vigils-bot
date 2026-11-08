@@ -20,7 +20,17 @@ module.exports = {
         .addStringOption(option =>
             option.setName('time')
                 .setDescription('Time until the event starts (e.g. 30m, 1h, 2d)')
-                .setRequired(true)),
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('category')
+                .setRequired(true)
+                .addChoices(
+                    { name: 'Patrol', value: 'Patrol' },
+                    { name: 'Sparring', value: 'Sparring' },
+                    { name: 'Tournament', value: 'Tournament' },
+                    { name: 'Misc', value: 'Misc' }
+                )
+        ),
 
     async execute(interaction) {
 
@@ -28,6 +38,7 @@ module.exports = {
         const description = interaction.options.getString('description');
         const timeInput = interaction.options.getString('time');
         const host = interaction.user;
+        const category = interaction.options.getString('category');
 
         const match = timeInput.match(/^(\d+)(s|m|h|d)$/i);
 
@@ -55,8 +66,11 @@ module.exports = {
         const discordTimestamp = `<t:${eventTime}:R>`;
 
         const embed = {
-            title: `${title}`,
-            description: `**Host: **${host.id}\n\n${description}\n\n**Starts: **${discordTimestamp}\n`,
+            title: `#${title}`,
+            description: `**Host: **<@${host.id}>\n
+                          **Info: **  ${description}\n
+                          **Category: ** ${category}\n
+                          **Starts: **${discordTimestamp}\n`,
             color: 0x89b9e0
         };
 
