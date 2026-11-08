@@ -36,11 +36,11 @@ module.exports = {
                     { name: 'Tournament', value: 'Tournament' },
                     { name: 'Misc', value: 'Misc' }
                 )
+        )
         .addStringOption(option =>
             option.setName('location')
                 .setDescription('The event location')
-                .setRequired(false))
-    ),
+                .setRequired(false)),
 
     async execute(interaction) {
 
@@ -49,6 +49,7 @@ module.exports = {
         const timeInput = interaction.options.getString('time');
         const host = interaction.user;
         const category = interaction.options.getString('category');
+        const location = interaction.options.getString('location') || 'Not specified';
 
         const match = timeInput.match(/^(\d+)(s|m|h|d)$/i);
 
@@ -90,15 +91,15 @@ module.exports = {
             )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
-                    .setContent(`**Description**\n${description}`)
+                    .setContent(`**Description: **\n${description}`)
             )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
-                    .setContent(`**Category**\n${category}`)
+                    .setContent(`**Category: **\n${category}`)
             )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
-                    .setContent(`**Location**\n${interaction.options.getString('location') || 'Not specified'}`)
+                    .setContent(`**Location: **\n${location}`)
             )
             .addSeparatorComponents(
                 new SeparatorBuilder()
@@ -108,7 +109,7 @@ module.exports = {
                 new SectionBuilder()
                     .addTextDisplayComponents(
                         new TextDisplayBuilder()
-                            .setContent(`**Starts**\n${discordTimestamp}`)
+                            .setContent(`**Starts: **\n${discordTimestamp}`)
                     )
                     .setButtonAccessory(
                         new ButtonBuilder()

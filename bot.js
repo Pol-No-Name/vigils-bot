@@ -97,6 +97,59 @@ async function checkEvent(client, event, now) {
 client.on('interactionCreate', async interaction => {
     if (!interaction.isButton()) return;
 
+    if (interaction.customId === 'join_event') {
+        const eventName = interaction.message.embeds[0].title.split(' ')[0];
+
+        const messageId = interaction.message.id;
+
+        if (!backupRequests.has(messageId)) {
+            backupRequests.set(messageId, []);
+        }
+
+        const responders = backupRequests.get(messageId);
+
+        if (responders.includes(interaction.user.id)) {
+            await interaction.reply({
+                content: 'You have already joined this event.',
+                ephemeral: true
+            });
+            return;
+        }
+        responders.push(interaction.user.id);
+
+        const mentions = responders.map(
+            id => `<@${id}>`
+        );
+
+        const formattedResponders = [];
+
+        for (let i = 0; i < mentions.length; i += 4) {
+            formattedResponders.push(
+                mentions.slice(i, i + 4).join(' • ')
+            );
+        }
+        const responderText = formattedResponders.join('\n');
+
+        const embed = interaction.message.embeds[0];
+
+        const responderFieldIndex = embed.fields.findIndex(
+            field => field.name.startsWith('Event Participants')
+        );
+        const updatedEmbed = EmbedBuilder.from(embed)
+            .spliceFields(
+                responderFieldIndex,
+                1,
+                {
+                    name: `Event Participants [${responders.length}]`,
+                    value: responderText
+                }
+            );
+        await interaction.update({
+            embeds: [updatedEmbed]
+        });
+
+    }
+
     if (interaction.customId === 'acknowledge_backup') {
 
         const messageId = interaction.message.id;
