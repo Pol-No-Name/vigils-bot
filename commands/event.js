@@ -66,11 +66,11 @@ module.exports = {
         const discordTimestamp = `<t:${eventTime}:R>`;
 
         const embed = {
-            title: `#${title}`,
+            title: `# ${title}`,
             fields: [
                 {
                     name: '\u200b',
-                    value: '━━━━━━━━━━━━━━━━━━━━',
+                    value: '### ━━━━━━━━━━━━━━━━━━━━',
                     inline: false
                 },
                 {
