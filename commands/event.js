@@ -75,7 +75,7 @@ module.exports = {
             fields: [
                 {
                     name: '\u200b',
-                    value: '### ━━━━━━━━━━━━━━━━━━━━',
+                    value: '### ━━━━━━━━━━━━━━━━━━━━━',
                     inline: false
                 },
                 {
