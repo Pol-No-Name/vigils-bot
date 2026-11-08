@@ -15,15 +15,12 @@ const events = new Map();
 function buildEventContainer(event) {
 
     const mentions = event.participants.map(id => `<@${id}>`);
-
     const formattedParticipants = [];
-
     for (let i = 0; i < mentions.length; i += 4) {
         formattedParticipants.push(
             mentions.slice(i, i + 4).join(' • ')
         );
     }
-
     const participantText = formattedParticipants.length
         ? formattedParticipants.join('\n')
         : 'Nobody has joined yet.';
@@ -73,6 +70,10 @@ function buildEventContainer(event) {
                     new TextDisplayBuilder()
                         .setContent(`**Starts:**\n<t:${event.eventTime}:R>`)
                 )
+                .addTextDisplayComponents(
+                    new TextDisplayBuilder()
+                        .setContent(`## **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`)
+                )
                 .setButtonAccessory(
                     new ButtonBuilder()
                         .setCustomId('join_event')
@@ -112,11 +113,35 @@ module.exports = {
                     { name: 'Misc', value: 'Misc' }
                 ))
         .addStringOption(option =>
+            option.setName('reward_honor')
+                .setDescription('The honor rewarded for attending')
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('reward_event_points')
+                .setDescription('The event points rewarded for attending')
+                .setRequired(true))
+
+        .addStringOption(option =>
             option.setName('location')
                 .setDescription('The event location')
                 .setRequired(false)),
 
     async execute(interaction) {
+
+        const member = interaction.member;
+
+        const isAdmin = member.permissions.has('Administrator');
+
+        const hasHostRole = member.roles.cache.some(role =>
+            HOST_ROLE_IDS.includes(role.id)
+        );
+
+        if (!isAdmin || !hasHostRole) {
+            return interaction.reply({
+                content: 'You do not have permission to host events.',
+                ephemeral: true
+            });
+        }
 
         const title = interaction.options.getString('title');
         const description = interaction.options.getString('description');
@@ -124,6 +149,22 @@ module.exports = {
         const host = interaction.user;
         const category = interaction.options.getString('category');
         const location = interaction.options.getString('location') || 'Not specified';
+        const HOST_ROLE_IDS = [
+            '1438836688305651792',
+            '1438836488346275870',
+            '1361370380773621770',
+            '1390720608714756220',
+            '1438842021484822688'
+        ];
+        const honor = Number(interaction.options.getString('reward_honor'));
+        const eventPoints = Number(interaction.options.getString('reward_event_points'));
+
+        if (!number.isInteger(honor) || honor < 0 || !number.isInteger(eventPoints) || eventPoints < 0) {
+            return interaction.reply({
+                content: 'The reward values must be positive and whole numbers',
+                ephemeral: true
+            });
+        }
 
         const match = timeInput.match(/^(\d+)(s|m|h|d)$/i);
 
@@ -161,7 +202,7 @@ module.exports = {
         const container = buildEventContainer(event);
         
         await interaction.reply({
-            content: '<@&1361371687505105128>',
+            content: '<@&a1361371687505105128>',
             allowedMentions: {
                 roles: ['1361371687505105128']
             }
