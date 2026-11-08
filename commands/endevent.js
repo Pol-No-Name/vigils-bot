@@ -3,6 +3,10 @@ const {
     MessageFlags
 } = require('discord.js');
 
+const honorManager = require('../hnManager');
+const eventPointsManager = require('../epManager');
+const leaderboardManager = require('../leaderboardManager');
+
 const eventCommand = require('./event');
 
 module.exports = {
@@ -23,7 +27,6 @@ module.exports = {
         const photo = interaction.options.getAttachment('photo');
         const eventMessageId = interaction.options.getString('event_message_id');
 
-        // Find the event
         const event = eventCommand.events.get(eventMessageId);
 
         if (!event) {
@@ -33,11 +36,10 @@ module.exports = {
             });
         }
 
-        // Check permissions
         const isAdmin = interaction.member.permissions.has('Administrator');
         const isHost = event.host === interaction.user.id;
 
-        if (!isAdmin || !isHost) {
+        if (!isAdmin && !isHost) {
             return interaction.reply({
                 content: 'Only the event host or an Administrator can end this event.',
                 flags: MessageFlags.Ephemeral
@@ -51,7 +53,6 @@ module.exports = {
             });
         }
 
-        // Get the photo destination channel from Railway
         const photoChannelId = process.env.EVENT_PHOTO_CHANNEL_ID;
 
         if (!photoChannelId) {
@@ -65,11 +66,9 @@ module.exports = {
             flags: MessageFlags.Ephemeral
         });
 
-        // Fetch the original event message
         const eventChannel = await interaction.guild.channels.fetch(event.channelId);
         const eventMessage = await eventChannel.messages.fetch(eventMessageId);
 
-        // Fetch the photo destination channel
         const photoChannel = await interaction.guild.channels.fetch(photoChannelId);
 
         if (!photoChannel || typeof photoChannel.send !== 'function') {
@@ -78,7 +77,6 @@ module.exports = {
             });
         }
 
-        // Upload the photo
         const participantList = event.participants.length > 0
             ? event.participants.map(id => `<@${id}>`).join('\n')
             : 'Nobody joined the event.';
@@ -94,18 +92,32 @@ module.exports = {
             }
         });
 
-        // Mark the event as ended
-        event.ended = true;
+if (!event.rewardsDistributed) {
 
-        // Update the original event card
-        await eventMessage.edit({
-            components: [
-                eventCommand.buildEventContainer(event)
-            ]
-        });
+    for (const participantId of event.participants) {
+
+        // Award Honor
+        honorManager.addPoints(participantId, event.honor);
+
+        // Award Event Points
+        eventPointsManager.addPoints(participantId, event.eventPoints);
+    }
+
+    event.rewardsDistributed = true;
+}
+
+    event.ended = true;
+
+    await eventMessage.edit({
+        components: [
+            eventCommand.buildEventContainer(event)
+        ]
+    });
+
+    await leaderboardManager.updateLeaderboard(interaction.client);
 
         await interaction.editReply({
-            content: 'The event has been ended and the photo has been uploaded.'
+            content: 'The event has ended and the photo has been uploaded.'
         });
     }
 };

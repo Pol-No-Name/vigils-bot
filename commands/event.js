@@ -84,7 +84,7 @@ function buildEventContainer(event) {
                 )
                 .addTextDisplayComponents(
                     new TextDisplayBuilder()
-                        .setContent(`## **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`)
+                        .setContent(`### **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`)
                 )
                 .setButtonAccessory(
                     new ButtonBuilder()
@@ -206,7 +206,8 @@ module.exports = {
             honor,
             eventPoints,
             channelId: interaction.channelId,
-            ended: false
+            ended: false,
+            rewardsDistributed: false
         };
 
         const container = buildEventContainer(event);
