@@ -213,7 +213,7 @@ module.exports = {
         const container = buildEventContainer(event);
         
         await interaction.reply({
-            content: '<@&a1361371687505105128>',
+            content: '<@&1361371687505105128>',
             allowedMentions: {
                 roles: ['1361371687505105128']
             }
