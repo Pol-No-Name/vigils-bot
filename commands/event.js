@@ -67,15 +67,39 @@ module.exports = {
 
         const embed = {
             title: `#${title}`,
-            description: `**Host: **<@${host.id}>\n
-                          **Info: **  ${description}\n
-                          **Category: ** ${category}\n
-                          **Starts: **${discordTimestamp}\n`,
+            fields: [
+                {
+                    name: '\u200b',
+                    value: '━━━━━━━━━━━━━━━━━━━━',
+                    inline: false
+                },
+                {
+                    name: 'Description',
+                    value: `${description}`,
+                    inline: false
+                },
+                {
+                    name: 'Category',
+                    value: `${category}`,
+                    inline: false
+                },
+                {
+                    name: 'Starts',
+                    value: `${discordTimestamp}`,
+                    inline: false
+                }
+            ],
             color: 0x89b9e0
-        };
+            };
+
+        const button = new ButtonBuilder()
+            .setCustomId('join_event')
+            .setLabel('Join Event')
+            .setStyle(ButtonStyle.Primary);
 
         await interaction.reply({
-            embeds: [embed]
+            embeds: [embed],
+            components: [new ActionRowBuilder().addComponents(button)]
         });
     }
 };
