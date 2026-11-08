@@ -144,7 +144,7 @@ module.exports = {
             HOST_ROLE_IDS.includes(role.id)
         );
 
-        if (!isAdmin || !hasHostRole) {
+        if (!isAdmin && !hasHostRole) {
             return interaction.reply({
                 content: 'You do not have permission to host events.',
                 ephemeral: true
@@ -160,7 +160,7 @@ module.exports = {
         const honor = Number(interaction.options.getString('reward_honor'));
         const eventPoints = Number(interaction.options.getString('reward_event_points'));
 
-        if (!number.isInteger(honor) || honor < 0 || !number.isInteger(eventPoints) || eventPoints < 0) {
+        if (!Number.isInteger(honor) || honor < 0 || !Number.isInteger(eventPoints) || eventPoints < 0) {
             return interaction.reply({
                 content: 'The reward values must be positive and whole numbers',
                 ephemeral: true
