@@ -12,6 +12,14 @@ const {
 
 const events = new Map();
 
+    const HOST_ROLE_IDS = [
+        '1438836688305651792',
+        '1438836488346275870',
+        '1361370380773621770',
+        '1390720608714756220',
+        '1438842021484822688'
+];
+
 function buildEventContainer(event) {
 
     const mentions = event.participants.map(id => `<@${id}>`);
@@ -149,13 +157,6 @@ module.exports = {
         const host = interaction.user;
         const category = interaction.options.getString('category');
         const location = interaction.options.getString('location') || 'Not specified';
-        const HOST_ROLE_IDS = [
-            '1438836688305651792',
-            '1438836488346275870',
-            '1361370380773621770',
-            '1390720608714756220',
-            '1438842021484822688'
-        ];
         const honor = Number(interaction.options.getString('reward_honor'));
         const eventPoints = Number(interaction.options.getString('reward_event_points'));
 
