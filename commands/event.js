@@ -31,7 +31,7 @@ function buildEventContainer(event) {
     return new ContainerBuilder()
         .addTextDisplayComponents(
             new TextDisplayBuilder()
-                .setContent(`<@&1361371687505105128>\n# ${event.title}`)
+                .setContent(`# ${event.title}`)
         )
         .addTextDisplayComponents(
             new TextDisplayBuilder()
@@ -161,6 +161,7 @@ module.exports = {
         const container = buildEventContainer(event);
 
         const message = await interaction.reply({
+            content: '<@&1361371687505105128>',
             components: [container],
             flags: MessageFlags.IsComponentsV2,
             allowedMentions: {
