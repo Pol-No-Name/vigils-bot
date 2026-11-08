@@ -27,6 +27,7 @@ module.exports = {
         const title = interaction.options.getString('title');
         const description = interaction.options.getString('description');
         const timeInput = interaction.options.getString('time');
+        const host = interaction.user;
 
         const match = timeInput.match(/^(\d+)(s|m|h|d)$/i);
 
@@ -52,11 +53,10 @@ module.exports = {
         );
 
         const discordTimestamp = `<t:${eventTime}:R>`;
-        const exactTimestamp = `<t:${eventTime}:F>`;
 
         const embed = {
             title: `${title}`,
-            description: `${description}\n\n**Starts:** ${discordTimestamp}\n**Exact time:** ${exactTimestamp}`,
+            description: `**Host: **${host.id}\n\n${description}\n\n**Starts: **${discordTimestamp}\n`,
             color: 0x89b9e0
         };
 
