@@ -36,7 +36,11 @@ module.exports = {
                     { name: 'Tournament', value: 'Tournament' },
                     { name: 'Misc', value: 'Misc' }
                 )
-        ),
+        .addStringOption(option =>
+            option.setName('location')
+                .setDescription('The event location')
+                .setRequired(false))
+    ),
 
     async execute(interaction) {
 
@@ -76,10 +80,6 @@ module.exports = {
                 new TextDisplayBuilder()
                     .setContent(`# ${title}`)
             )
-            .addSeparatorComponents(
-                new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-            )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
                     .setContent(`Hosted by <@${host.id}>`)
@@ -92,21 +92,13 @@ module.exports = {
                 new TextDisplayBuilder()
                     .setContent(`**Description**\n${description}`)
             )
-            .addSeparatorComponents(
-                new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-            )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
                     .setContent(`**Category**\n${category}`)
             )
-            .addSeparatorComponents(
-                new SeparatorBuilder()
-                    .setSpacing(SeparatorSpacingSize.Small)
-            )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
-                    .setContent(`**Starts**\n${discordTimestamp}`)
+                    .setContent(`**Location**\n${interaction.options.getString('location') || 'Not specified'}`)
             )
             .addSeparatorComponents(
                 new SeparatorBuilder()
@@ -127,6 +119,7 @@ module.exports = {
             );
 
         await interaction.reply({
+            content: '<@&1361371687505105128>',
             components: [container],
             flags: MessageFlags.IsComponentsV2
         });
