@@ -76,7 +76,11 @@ function buildEventContainer(event) {
             new SectionBuilder()
                 .addTextDisplayComponents(
                     new TextDisplayBuilder()
-                        .setContent(`**Starts:**\n<t:${event.eventTime}:R>`)
+                        .setContent(
+                            event.ended
+                                ? '**Status:**\n# ENDED'
+                                : `**Starts:**\n<t:${event.eventTime}:R>`
+                        )
                 )
                 .addTextDisplayComponents(
                     new TextDisplayBuilder()
@@ -87,6 +91,7 @@ function buildEventContainer(event) {
                         .setCustomId('join_event')
                         .setLabel('Join Event')
                         .setStyle(ButtonStyle.Primary)
+                        .setDisabled(Boolean(event.ended))
                 )
         );
 }
@@ -197,7 +202,11 @@ module.exports = {
             location,
             host: host.id,
             eventTime,
-            participants: []
+            participants: [],
+            honor,
+            eventPoints,
+            channelId: interaction.channelId,
+            ended: false
         };
 
         const container = buildEventContainer(event);
