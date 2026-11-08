@@ -159,14 +159,17 @@ module.exports = {
         };
 
         const container = buildEventContainer(event);
-
-        const message = await interaction.reply({
+        
+        await interaction.reply({
             content: '<@&1361371687505105128>',
-            components: [container],
-            flags: MessageFlags.IsComponentsV2,
             allowedMentions: {
                 roles: ['1361371687505105128']
-            },
+            }
+        });
+
+        const message = await interaction.followUp({
+            components: [container],
+            flags: MessageFlags.IsComponentsV2,
             fetchReply: true
         });
 
