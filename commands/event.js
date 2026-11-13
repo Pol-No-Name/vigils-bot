@@ -7,7 +7,8 @@ const {
     SeparatorBuilder,
     SeparatorSpacingSize,
     SectionBuilder,
-    MessageFlags
+    MessageFlags,
+    ActionRowBuilder
 } = require('discord.js');
 
 const events = new Map();
@@ -86,21 +87,23 @@ function buildEventContainer(event) {
                     new TextDisplayBuilder()
                         .setContent(`### **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`)
                 )
-                .setButtonAccessory(
-                    new ButtonBuilder()
-                        .setCustomId('join_event')
-                        .setLabel('Join Event')
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(Boolean(event.ended))
-                )
-                .setButtonAccessory(
-                    new ButtonBuilder()
-                        .setCustomId('leave_event')
-                        .setLabel('Leave Event')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setDisabled(Boolean(event.ended))
-                )
-        );
+                .addActionRowComponents(
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setCustomId('join_event')
+                                .setLabel('Join Event')
+                                .setStyle(ButtonStyle.Primary)
+                                .setDisabled(Boolean(event.ended || event.cancelled)),
+
+                            new ButtonBuilder()
+                                .setCustomId('leave_event')
+                                .setLabel('Leave Event')
+                                .setStyle(ButtonStyle.Secondary)
+                                .setDisabled(Boolean(event.ended || event.cancelled))
+                        )
+                    )
+                );
 }
 
 module.exports = {
