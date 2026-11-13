@@ -93,6 +93,13 @@ function buildEventContainer(event) {
                         .setStyle(ButtonStyle.Primary)
                         .setDisabled(Boolean(event.ended))
                 )
+                .setButtonAccessory(
+                    new ButtonBuilder()
+                        .setCustomId('leave_event')
+                        .setLabel('Leave Event')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setDisabled(Boolean(event.ended))
+                )
         );
 }
 

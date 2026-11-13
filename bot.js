@@ -132,6 +132,40 @@ client.on(Events.InteractionCreate, async interaction => {
         return;
     }
 
+    if (interaction.customId === 'leave_event') {
+
+        const messageId = interaction.message.id;
+        const eventCommand = client.commands.get('event');
+        const event = eventCommand.events.get(messageId);
+
+        if (!event) {
+            return interaction.reply({
+                content: 'This event is no longer available.',
+                ephemeral: true
+            });
+        }
+
+        if (!event.participants.includes(interaction.user.id)) {
+            return interaction.reply({
+                content: 'You are not participating in this event.',
+                ephemeral: true
+            });
+        }
+
+        event.participants = event.participants.filter(id => id !== interaction.user.id);
+
+        const updatedContainer = eventCommand.buildEventContainer(event);
+
+        await interaction.update({
+            components: [updatedContainer],
+            allowedMentions: {
+                parse: []
+            }
+        });
+
+        return;
+    }
+
     if (interaction.customId === 'acknowledge_backup') {
 
         const messageId = interaction.message.id;
