@@ -104,7 +104,7 @@ client.on(Events.InteractionCreate, async interaction => {
         const eventCommand = client.commands.get('event');
         const event = eventCommand.events.get(messageId);
 
-        if (!event) {
+        if (event.ended || event.cancelled) {
             return interaction.reply({
                 content: 'This event is no longer available.',
                 ephemeral: true

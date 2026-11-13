@@ -25,11 +25,13 @@ function buildEventContainer(event) {
 
     const mentions = event.participants.map(id => `<@${id}>`);
     const formattedParticipants = [];
+
     for (let i = 0; i < mentions.length; i += 4) {
         formattedParticipants.push(
             mentions.slice(i, i + 4).join(' • ')
         );
     }
+
     const participantText = formattedParticipants.length
         ? formattedParticipants.join('\n')
         : 'Nobody has joined yet.';
@@ -78,32 +80,36 @@ function buildEventContainer(event) {
                 .addTextDisplayComponents(
                     new TextDisplayBuilder()
                         .setContent(
-                            event.ended
-                                ? '**Status:**\n# ENDED'
-                                : `**Starts:**\n<t:${event.eventTime}:R>`
+                            event.cancelled
+                                ? `**Status:**\n# CANCELLED\n**Reason:** ${event.cancelReason}`
+                                : event.ended
+                                    ? '**Status:**\n# ENDED'
+                                    : `**Starts:**\n<t:${event.eventTime}:R>`
                         )
                 )
                 .addTextDisplayComponents(
                     new TextDisplayBuilder()
-                        .setContent(`### **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`)
-                )
-                .addActionRowComponents(
-                    new ActionRowBuilder()
-                        .addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('join_event')
-                                .setLabel('Join Event')
-                                .setStyle(ButtonStyle.Primary)
-                                .setDisabled(Boolean(event.ended || event.cancelled)),
-
-                            new ButtonBuilder()
-                                .setCustomId('leave_event')
-                                .setLabel('Leave Event')
-                                .setStyle(ButtonStyle.Secondary)
-                                .setDisabled(Boolean(event.ended || event.cancelled))
+                        .setContent(
+                            `### **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`
                         )
-                    )
-                );
+                )
+        )
+        .addActionRowComponents(
+            new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('join_event')
+                        .setLabel('Join Event')
+                        .setStyle(ButtonStyle.Primary)
+                        .setDisabled(Boolean(event.ended || event.cancelled)),
+
+                    new ButtonBuilder()
+                        .setCustomId('leave_event')
+                        .setLabel('Leave Event')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setDisabled(Boolean(event.ended || event.cancelled))
+                )
+        );
 }
 
 module.exports = {
@@ -217,6 +223,7 @@ module.exports = {
             eventPoints,
             channelId: interaction.channelId,
             ended: false,
+            cancelled: false,
             rewardsDistributed: false
         };
 
