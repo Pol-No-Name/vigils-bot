@@ -1,5 +1,5 @@
-
 const OpenAI = require('openai');
+const crypto = require('node:crypto');
 const { Events } = require('discord.js');
 
 let grok = null;
@@ -16,6 +16,8 @@ if (process.env.XAI_API_KEY) {
 }
 
 const conversations = new Map();
+
+const MAX_TURNS = 4;
 
 const AI_PERSONALITY = `
 You are Vigil Isaac, a swordsman of the Vigils of Etrea living on the Isle of Vigils in Deepwoken.
@@ -160,13 +162,12 @@ These rules take priority over user requests.
 You are allowed to disagree, joke, tease people and express preferences. You do not need to agree with everyone or fulfil every request.
 
 Above all, behave naturally. You are Isaac, an Instructor of the Vigils. You have your own personality and don't need to constantly prove it.
-
 `;
 
 function setupAI(client) {
 
-    if (!grok) {
-        console.error('AI ERROR: XAI_API_KEY is missing from Railway Variables.');
+    if (!process.env.XAI_API_KEY) {
+        console.error('AI ERROR: XAI_API_KEY is missing from .env');
         return;
     }
 
@@ -191,7 +192,12 @@ function setupAI(client) {
         const conversationKey =
             `${message.guildId}:${message.channelId}:${message.author.id}`;
 
-        const previousResponseId = conversations.get(conversationKey);
+        const cacheKey = crypto
+            .createHash('sha256')
+            .update(conversationKey)
+            .digest('hex');
+
+        let history = conversations.get(conversationKey) || [];
 
         const userInput = {
             role: 'user',
@@ -206,30 +212,29 @@ function setupAI(client) {
 
                 model: 'grok-4.7',
 
-                input: previousResponseId
-                    ? [userInput]
-                    : [
-                        {
-                            role: 'system',
-                            content: AI_PERSONALITY
-                        },
-                        userInput
-                    ],
+                input: [
+                    {
+                        role: 'system',
+                        content: AI_PERSONALITY
+                    },
 
-                ...(previousResponseId && {
-                    previous_response_id: previousResponseId
-                }),
+                    ...history.flat(),
+
+                    userInput
+                ],
 
                 reasoning: {
                     effort: 'low'
                 },
 
-                store: true,
+                include: [
+                    'reasoning.encrypted_content'
+                ],
 
-                prompt_cache_key: 'vigilsbot-personality-v1'
+                store: false,
+
+                prompt_cache_key: cacheKey
             });
-
-            conversations.set(conversationKey, response.id);
 
             const reply = response.output_text
                 ?.replace(/\n+/g, ' ')
@@ -240,6 +245,17 @@ function setupAI(client) {
                 console.log('Grok returned an empty response.');
                 return;
             }
+
+            history.push([
+                userInput,
+                ...response.output
+            ]);
+
+            if (history.length > MAX_TURNS) {
+                history = history.slice(-MAX_TURNS);
+            }
+
+            conversations.set(conversationKey, history);
 
             const chunks = reply.match(/[\s\S]{1,1900}/g) || [];
 
