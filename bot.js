@@ -9,6 +9,7 @@ const backupRequests = new Map();
 
 let DEBUG = false;
 require('dotenv').config();
+const setupAI = require('./ai');
 
 const warning_time = 5;
 
@@ -29,6 +30,8 @@ const client = new Client({
 });
 
 client.commands = new Collection();
+
+setupAI(client);
 
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
