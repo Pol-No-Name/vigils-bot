@@ -37,6 +37,7 @@ function buildEventContainer(event) {
         : 'Nobody has joined yet.';
 
     return new ContainerBuilder()
+        .setAccentColor(0xA3B9D0)
         .addTextDisplayComponents(
             new TextDisplayBuilder()
                 .setContent(`# ${event.title}`)
@@ -97,13 +98,13 @@ function buildEventContainer(event) {
                     new ButtonBuilder()
                         .setCustomId('join_event')
                         .setLabel('Join Event')
-                        .setStyle(ButtonStyle.Primary)
+                        .setStyle(ButtonStyle.Success)
                         .setDisabled(Boolean(event.ended || event.cancelled)),
 
                     new ButtonBuilder()
                         .setCustomId('leave_event')
                         .setLabel('Leave Event')
-                        .setStyle(ButtonStyle.Secondary)
+                        .setStyle(ButtonStyle.Danger)
                         .setDisabled(Boolean(event.ended || event.cancelled))
                 )
         );
