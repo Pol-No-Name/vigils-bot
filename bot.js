@@ -94,15 +94,33 @@ async function checkEvent(client, event, now) {
     }
 }
 
+
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isButton()) return;
 
-    if (interaction.customId === 'join_event') {
-
+    if (
+        interaction.customId === 'join_event' ||
+        interaction.customId === 'leave_event'
+    ) {
         const messageId = interaction.message.id;
 
         const eventCommand = client.commands.get('event');
+
+        if (!eventCommand) {
+            return interaction.reply({
+                content: 'The event command could not be loaded.',
+                ephemeral: true
+            });
+        }
+
         const event = eventCommand.events.get(messageId);
+
+        if (!event) {
+            return interaction.reply({
+                content: 'This event could not be found. It may have expired or the bot may have restarted.',
+                ephemeral: true
+            });
+        }
 
         if (event.ended || event.cancelled) {
             return interaction.reply({
@@ -111,48 +129,31 @@ client.on(Events.InteractionCreate, async interaction => {
             });
         }
 
-        if (event.participants.includes(interaction.user.id)) {
-            return interaction.reply({
-                content: 'You have already joined this event.',
-                ephemeral: true
-            });
-        }
+        if (interaction.customId === 'join_event') {
 
-        event.participants.push(interaction.user.id);
-
-        const updatedContainer = eventCommand.buildEventContainer(event);
-
-        await interaction.update({
-            components: [updatedContainer],
-            allowedMentions: {
-                parse: []
+            if (event.participants.includes(interaction.user.id)) {
+                return interaction.reply({
+                    content: 'You have already joined this event.',
+                    ephemeral: true
+                });
             }
-        });
 
-        return;
-    }
-
-    if (interaction.customId === 'leave_event') {
-
-        const messageId = interaction.message.id;
-        const eventCommand = client.commands.get('event');
-        const event = eventCommand.events.get(messageId);
-
-        if (!event) {
-            return interaction.reply({
-                content: 'This event is no longer available.',
-                ephemeral: true
-            });
+            event.participants.push(interaction.user.id);
         }
 
-        if (!event.participants.includes(interaction.user.id)) {
-            return interaction.reply({
-                content: 'You are not participating in this event.',
-                ephemeral: true
-            });
-        }
+        if (interaction.customId === 'leave_event') {
 
-        event.participants = event.participants.filter(id => id !== interaction.user.id);
+            if (!event.participants.includes(interaction.user.id)) {
+                return interaction.reply({
+                    content: 'You are not participating in this event.',
+                    ephemeral: true
+                });
+            }
+
+            event.participants = event.participants.filter(
+                id => id !== interaction.user.id
+            );
+        }
 
         const updatedContainer = eventCommand.buildEventContainer(event);
 
@@ -221,6 +222,7 @@ client.on(Events.InteractionCreate, async interaction => {
         });
     }
 });
+
 
 client.once(Events.ClientReady, async () => {
     console.log(`Logged in as ${client.user.tag}`);

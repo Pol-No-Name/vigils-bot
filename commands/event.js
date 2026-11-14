@@ -1,3 +1,4 @@
+
 const {
     SlashCommandBuilder,
     ButtonBuilder,
@@ -6,19 +7,18 @@ const {
     TextDisplayBuilder,
     SeparatorBuilder,
     SeparatorSpacingSize,
-    SectionBuilder,
     MessageFlags,
     ActionRowBuilder
 } = require('discord.js');
 
 const events = new Map();
 
-    const HOST_ROLE_IDS = [
-        '1438836688305651792',
-        '1438836488346275870',
-        '1361370380773621770',
-        '1390720608714756220',
-        '1438842021484822688'
+const HOST_ROLE_IDS = [
+    '1438836688305651792',
+    '1438836488346275870',
+    '1361370380773621770',
+    '1390720608714756220',
+    '1438842021484822688'
 ];
 
 function buildEventContainer(event) {
@@ -75,23 +75,20 @@ function buildEventContainer(event) {
             new SeparatorBuilder()
                 .setSpacing(SeparatorSpacingSize.Small)
         )
-        .addSectionComponents(
-            new SectionBuilder()
-                .addTextDisplayComponents(
-                    new TextDisplayBuilder()
-                        .setContent(
-                            event.cancelled
-                                ? `**Status:**\n# CANCELLED\n**Reason:** ${event.cancelReason}`
-                                : event.ended
-                                    ? '**Status:**\n# ENDED'
-                                    : `**Starts:**\n<t:${event.eventTime}:R>`
-                        )
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(
+                    event.cancelled
+                        ? `**Status:**\n# CANCELLED\n**Reason:** ${event.cancelReason}`
+                        : event.ended
+                            ? '**Status:**\n# ENDED'
+                            : `**Starts:**\n<t:${event.eventTime}:R>`
                 )
-                .addTextDisplayComponents(
-                    new TextDisplayBuilder()
-                        .setContent(
-                            `### **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`
-                        )
+        )
+        .addTextDisplayComponents(
+            new TextDisplayBuilder()
+                .setContent(
+                    `### **Rewards:**\nHonor: ${event.honor}, Event Points: ${event.eventPoints}`
                 )
         )
         .addActionRowComponents(
@@ -149,7 +146,6 @@ module.exports = {
             option.setName('reward_event_points')
                 .setDescription('The event points rewarded for attending')
                 .setRequired(true))
-
         .addStringOption(option =>
             option.setName('location')
                 .setDescription('The event location')
@@ -181,9 +177,12 @@ module.exports = {
         const honor = Number(interaction.options.getString('reward_honor'));
         const eventPoints = Number(interaction.options.getString('reward_event_points'));
 
-        if (!Number.isInteger(honor) || honor < 0 || !Number.isInteger(eventPoints) || eventPoints < 0) {
+        if (
+            !Number.isInteger(honor) || honor < 0 ||
+            !Number.isInteger(eventPoints) || eventPoints < 0
+        ) {
             return interaction.reply({
-                content: 'The reward values must be positive and whole numbers',
+                content: 'The reward values must be positive and whole numbers.',
                 ephemeral: true
             });
         }
@@ -228,7 +227,7 @@ module.exports = {
         };
 
         const container = buildEventContainer(event);
-        
+
         await interaction.reply({
             content: '<@&1361371687505105128>',
             allowedMentions: {
